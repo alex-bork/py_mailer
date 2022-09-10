@@ -2,6 +2,7 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email import encoders
+from tkinter import N
 from typing import List
 import smtplib
 import os
@@ -105,13 +106,16 @@ class SmtpMail(IMail):
 
     def __check_data(self) -> None:
 
-        if not self.host or \
-            not self.port or \
-            not self.user or \
-            not self.password or \
-            not self.recipients or \
-            not self.subject:
-            raise ValueError('All of the following attributes have to be supplied: host, port, user, password, recipients, subject, text or text_html.')
+        attrs_to_check = ['host', 'port', 'user', 'password', 'recipients', 'subject']
+        msg_param = ''
 
-        if self.text and self.text_html:
+        for attr in attrs_to_check:
+            if not getattr(self, attr):
+                msg_param += attr + ','
+
+        if msg_param:
+            msg_param = msg_param[0:len(msg_param)-1]
+            raise ValueError(f'The following attributes have to be supplied: {msg_param}')
+
+        if (not self.text and not self.text_html) or (self.text and self.text_html):
             raise ValueError('Supply either mail_text or mail_text_html')
