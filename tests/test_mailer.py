@@ -1,8 +1,8 @@
 import sys, os, unittest
 sys.path.append(os.path.realpath('.'))
-from py_mailer import SmtpMail
+from mailer import SmtpMail
 import configparser
-from py_config_initiator.module import ConfigInitiator
+from config_initiator import ConfigInitiator
 
 
 ConfigInitiator(
