@@ -8,6 +8,10 @@ import smtplib
 import os
 
 
+class WrongParameterType(Exception):
+    pass
+
+
 class IMail:
 
     def send(self):
@@ -25,9 +29,16 @@ class SmtpMail(IMail):
                     smtp_user: str = None, 
                     smtp_password: str = None,
                     mail_subject: str = None,
-                    mail_recipients: List = None,
+                    mail_recipients: list[str] = None,
                     mail_text: str = None,
                     mail_text_html: str = None):
+
+        if not isinstance(mail_recipients, list):
+            raise WrongParameterType('Recipients is not a list')
+
+        for recipient in mail_recipients:
+            if not isinstance(recipient, str):
+                raise WrongParameterType('Not all of recipients are strings')
       
         self.host = smtp_host
         self.port = smtp_port
